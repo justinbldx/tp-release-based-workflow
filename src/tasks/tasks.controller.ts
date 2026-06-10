@@ -32,11 +32,15 @@ export class TasksController {
     return this.tasksService.findAll();
   }
 
-  // TODO (Release-Based Workflow — branche feature/add-task-stats issue de main) :
-  // Ajouter ici l'endpoint GET /tasks/stats renvoyant { total: number, done: number, pending: number }.
-  // ⚠️ Cet endpoint DOIT rester AVANT @Get(':id') : NestJS résout les routes dans l'ordre
-  // de déclaration. Si "stats" arrive après :id, le ParseIntPipe tentera de convertir
-  // la chaîne "stats" en entier et la requête échouera.
+  @ApiOperation({ summary: 'Récupérer les statistiques des tâches' })
+  @ApiResponse({
+    status: 200,
+    description: 'Statistiques des tâches (total, done, pending)',
+  })
+  @Get('stats')
+  getStats() {
+    return this.tasksService.getStats();
+  }
 
   @ApiOperation({ summary: 'Récupérer une tâche par ID' })
   @ApiResponse({ status: 200, description: 'Tâche trouvée' })
