@@ -39,5 +39,19 @@ export class TasksService {
   async remove(id: number): Promise<Task> {
     await this.findOne(id);
     return this.prisma.task.delete({ where: { id } });
-  }
+  } 
+
+  async getStats(): Promise<{ total: number; done: number; pending: number }> {
+  const [total, done, pending] = await Promise.all([
+    this.prisma.task.count(),
+    this.prisma.task.count({ where: { done: true } }),
+    this.prisma.task.count({ where: { done: false } }),
+  ]);
+
+  return {
+    total,
+    done,
+    pending,
+  };
+}
 }
